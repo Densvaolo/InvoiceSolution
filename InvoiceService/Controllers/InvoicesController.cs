@@ -1,4 +1,6 @@
 ﻿using InvoiceService.Data;
+using InvoiceService.Dtos;
+using InvoiceService.Services;
 using InvoiceService.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +13,14 @@ namespace InvoiceService.Controllers
     public class InvoicesController : ControllerBase
     {
         private readonly InvoiceDbContext _context;
+        private readonly IInvoiceService _invoiceService;
 
-        public InvoicesController(InvoiceDbContext context)
+        public InvoicesController(InvoiceDbContext context, IInvoiceService invoiceService)
         {
             _context = context;
+            _invoiceService = invoiceService;
         }
+
 
         [Authorize] // Lägg till ROLE
         [HttpGet]
@@ -67,14 +72,15 @@ namespace InvoiceService.Controllers
             return NoContent();
         }
 
+    
         [HttpPost]
-        public async Task<ActionResult<Invoice>> PostInvoice(Invoice invoice)
-        {
-            _context.Invoices.Add(invoice);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetInvoice", new { id = invoice.Id }, invoice);
+        public async Task<ActionResult<Invoice>> PostInvoice(CreateInvoiceDto dto)
+        {
+            var created = await _invoiceService.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetInvoice), new { id = created.Id }, created);
         }
+
 
 
         [HttpDelete("{id}")]

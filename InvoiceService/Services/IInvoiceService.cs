@@ -1,4 +1,5 @@
-﻿using InvoiceService.Models;
+﻿using InvoiceService.Dtos;
+using InvoiceService.Models;
 
 namespace InvoiceService.Services
 {
@@ -6,7 +7,7 @@ namespace InvoiceService.Services
     {
         Task<IEnumerable<Invoice>> GetAllAsync();
         Task<Invoice?> GetByIdAsync(int id);
-        Task<Invoice> CreateAsync(Invoice invoice);
+        Task<Invoice> CreateAsync(CreateInvoiceDto dto);
         Task<bool> UpdateAsync(int id, Invoice invoice);
         Task<bool> DeleteAsync(int id);
     }

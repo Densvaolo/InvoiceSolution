@@ -1,5 +1,6 @@
 ﻿using InvoiceService.Models;
 using InvoiceService.Repositories;
+using InvoiceService.Dtos;
 
 namespace InvoiceService.Services
 {
@@ -17,11 +18,25 @@ namespace InvoiceService.Services
             return await _repository.GetByIdAsync(id);
         }
 
-        public async Task<Invoice> CreateAsync(Invoice invoice)
+        public async Task<Invoice> CreateAsync(CreateInvoiceDto dto)
         {
-            invoice.Status = "Unpaid"; 
+            var invoice = new Invoice
+            {
+                InvoiceNumber = $"INV{DateTime.Now:yyyyMMddHHmmss}", // t.ex. INV20240507185000
+                BookingId = dto.BookingId,
+                CustomerName = dto.CustomerName,
+                EventName = dto.EventName,
+                Amount = dto.Amount,
+                IssuedDate = dto.IssuedDate,
+                DueDate = dto.DueDate,
+                Status = dto.Status
+            };
+
             return await _repository.AddAsync(invoice);
         }
+
+
+
 
         public async Task<bool> UpdateAsync(int id, Invoice invoice)
         {

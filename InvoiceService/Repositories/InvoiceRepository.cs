@@ -21,6 +21,7 @@ namespace InvoiceService.Repositories
         public async Task<Invoice> AddAsync(Invoice invoice)
         {
             _context.Invoices.Add(invoice);
+            
             await _context.SaveChangesAsync();
             return invoice;
         }
