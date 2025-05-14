@@ -22,17 +22,17 @@ namespace InvoiceService.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoices()
+        public async Task<ActionResult<IEnumerable<InvoiceDto>>> GetInvoices()
         {
             var invoices = await _invoiceService.GetAllAsync();
             return Ok(invoices);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Invoice>> GetInvoice(int id)
+        public async Task<ActionResult<InvoiceDto>> GetInvoice(int id)
         {
             var invoice = await _invoiceService.GetByIdAsync(id);
             if (invoice == null) return NotFound();
@@ -40,7 +40,7 @@ namespace InvoiceService.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutInvoice(int id, UpdateInvoiceDto dto)
         {
@@ -50,16 +50,17 @@ namespace InvoiceService.Controllers
         }
 
         // Använda modelstate?
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<Invoice>> PostInvoice(CreateInvoiceDto dto)
+        public async Task<ActionResult<InvoiceDto>> PostInvoice(CreateInvoiceDto dto)
         {
             var created = await _invoiceService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetInvoice), new { id = created.Id }, created);
         }
 
 
-        [Authorize(Roles = "Admin")]
+
+        // [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInvoice(int id)
         {
@@ -68,10 +69,5 @@ namespace InvoiceService.Controllers
             return NoContent();
         }
 
-
-        private bool InvoiceExists(int id)
-        {
-            return _context.Invoices.Any(e => e.Id == id);
-        }
     }
 }

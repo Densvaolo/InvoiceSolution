@@ -10,23 +10,46 @@ namespace InvoiceService.Services
     {
         private readonly IInvoiceRepository _repository = repository;
 
-        public async Task<IEnumerable<Invoice>> GetAllAsync()
+        public async Task<IEnumerable<InvoiceDto>> GetAllAsync()
         {
-            return await _repository.GetAllAsync();
+            var invoices = await _repository.GetAllAsync();
 
+            return invoices.Select(i => new InvoiceDto
+            {
+                Id = i.Id,
+                InvoiceNumber = i.InvoiceNumber,
+                CustomerName = i.CustomerName,
+                EventName = i.EventName,
+                Amount = i.Amount,
+                DueDate = i.DueDate,
+                Status = i.Status
+            });
         }
 
 
-        public async Task<Invoice?> GetByIdAsync(int id)
+
+        public async Task<InvoiceDto?> GetByIdAsync(int id)
         {
-            return await _repository.GetByIdAsync(id);
+            var invoice = await _repository.GetByIdAsync(id);
+            if (invoice == null) return null;
+
+            return new InvoiceDto
+            {
+                Id = invoice.Id,
+                InvoiceNumber = invoice.InvoiceNumber,
+                CustomerName = invoice.CustomerName,
+                EventName = invoice.EventName,
+                Amount = invoice.Amount,
+                DueDate = invoice.DueDate,
+                Status = invoice.Status
+            };
         }
 
-        public async Task<Invoice> CreateAsync(CreateInvoiceDto dto)
+        public async Task<InvoiceDto> CreateAsync(CreateInvoiceDto dto)
         {
             var invoice = new Invoice
             {
-                InvoiceNumber = $"INV{DateTime.Now:yyyyMMddHHmmss}", // t.ex. INV20240507185000
+                InvoiceNumber = $"INV{DateTime.Now:yyyyMMddHHmmss}",
                 BookingId = dto.BookingId,
                 CustomerName = dto.CustomerName,
                 EventName = dto.EventName,
@@ -36,11 +59,23 @@ namespace InvoiceService.Services
                 Status = dto.Status
             };
 
-            return await _repository.AddAsync(invoice);
+            var created = await _repository.AddAsync(invoice);
+
+            return new InvoiceDto
+            {
+                Id = created.Id,
+                InvoiceNumber = created.InvoiceNumber,
+                CustomerName = created.CustomerName,
+                EventName = created.EventName,
+                Amount = created.Amount,
+                DueDate = created.DueDate,
+                Status = created.Status
+            };
         }
 
 
-        public async Task<Invoice?> UpdateAsync(int id, UpdateInvoiceDto dto)
+
+        public async Task<InvoiceDto?> UpdateAsync(int id, UpdateInvoiceDto dto)
         {
             var invoice = await _repository.GetByIdAsync(id);
             if (invoice == null) return null;
@@ -49,7 +84,17 @@ namespace InvoiceService.Services
             invoice.DueDate = dto.DueDate;
 
             await _repository.SaveChangesAsync();
-            return invoice;
+
+            return new InvoiceDto
+            {
+                Id = invoice.Id,
+                InvoiceNumber = invoice.InvoiceNumber,
+                CustomerName = invoice.CustomerName,
+                EventName = invoice.EventName,
+                Amount = invoice.Amount,
+                DueDate = invoice.DueDate,
+                Status = invoice.Status
+            };
         }
 
 
@@ -60,5 +105,21 @@ namespace InvoiceService.Services
             await _repository.DeleteAsync(id);
             return true;
         }
+
+        private InvoiceDto MapToDto(Invoice invoice)
+        {
+            return new InvoiceDto
+            {
+                InvoiceNumber = invoice.InvoiceNumber,
+                CustomerName = invoice.CustomerName,
+                EventName = invoice.EventName,
+                Amount = invoice.Amount,
+                Status = invoice.Status,
+                DueDate = invoice.DueDate
+            };
+        }
+
+
+
     }
 }

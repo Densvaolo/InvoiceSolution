@@ -5,10 +5,10 @@ namespace InvoiceService.Services
 {
     public interface IInvoiceService
     {
-        Task<IEnumerable<Invoice>> GetAllAsync();
-        Task<Invoice?> GetByIdAsync(int id);
-        Task<Invoice> CreateAsync(CreateInvoiceDto dto);
-        Task<Invoice?> UpdateAsync(int id, UpdateInvoiceDto dto);
+        Task<IEnumerable<InvoiceDto>> GetAllAsync();
+        Task<InvoiceDto?> GetByIdAsync(int id);
+        Task<InvoiceDto> CreateAsync(CreateInvoiceDto dto);
+        Task<InvoiceDto?> UpdateAsync(int id, UpdateInvoiceDto dto);
         Task<bool> DeleteAsync(int id);
     }
 }
