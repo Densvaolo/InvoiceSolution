@@ -22,59 +22,35 @@ namespace InvoiceService.Controllers
         }
 
 
-        [Authorize] // Lägg till ROLE
+        //[Authorize] // Lägg till ROLE
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoices()
         {
-            return await _context.Invoices.ToListAsync();
+            var invoices = await _invoiceService.GetAllAsync();
+            return Ok(invoices);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Invoice>> GetInvoice(int id)
         {
-            var invoice = await _context.Invoices.FindAsync(id);
-
-            if (invoice == null)
-            {
-                return NotFound();
-            }
-
-            return invoice;
+            var invoice = await _invoiceService.GetByIdAsync(id);
+            if (invoice == null) return NotFound();
+            return Ok(invoice);
         }
 
-       
+
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInvoice(int id, Invoice invoice)
+        public async Task<IActionResult> PutInvoice(int id, UpdateInvoiceDto dto)
         {
-            if (id != invoice.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(invoice).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!InvoiceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var updated = await _invoiceService.UpdateAsync(id, dto);
+            if (updated == null) return NotFound();
+            return Ok(updated);
         }
 
-    
-        [HttpPost]
+        // Använda modelstate?
 
+        [HttpPost]
         public async Task<ActionResult<Invoice>> PostInvoice(CreateInvoiceDto dto)
         {
             var created = await _invoiceService.CreateAsync(dto);
@@ -86,17 +62,11 @@ namespace InvoiceService.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInvoice(int id)
         {
-            var invoice = await _context.Invoices.FindAsync(id);
-            if (invoice == null)
-            {
-                return NotFound();
-            }
-
-            _context.Invoices.Remove(invoice);
-            await _context.SaveChangesAsync();
-
+            var success = await _invoiceService.DeleteAsync(id);
+            if (!success) return NotFound();
             return NoContent();
         }
+
 
         private bool InvoiceExists(int id)
         {

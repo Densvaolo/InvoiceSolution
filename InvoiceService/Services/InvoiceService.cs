@@ -1,6 +1,8 @@
 ﻿using InvoiceService.Models;
 using InvoiceService.Repositories;
 using InvoiceService.Dtos;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace InvoiceService.Services
 {
@@ -11,7 +13,9 @@ namespace InvoiceService.Services
         public async Task<IEnumerable<Invoice>> GetAllAsync()
         {
             return await _repository.GetAllAsync();
+
         }
+
 
         public async Task<Invoice?> GetByIdAsync(int id)
         {
@@ -36,16 +40,18 @@ namespace InvoiceService.Services
         }
 
 
-
-
-        public async Task<bool> UpdateAsync(int id, Invoice invoice)
+        public async Task<Invoice?> UpdateAsync(int id, UpdateInvoiceDto dto)
         {
-            if (!await _repository.ExistsAsync(id)) return false;
+            var invoice = await _repository.GetByIdAsync(id);
+            if (invoice == null) return null;
 
-            invoice.Id = id;
-            await _repository.UpdateAsync(invoice);
-            return true;
+            invoice.Status = dto.Status;
+            invoice.DueDate = dto.DueDate;
+
+            await _repository.SaveChangesAsync();
+            return invoice;
         }
+
 
         public async Task<bool> DeleteAsync(int id)
         {

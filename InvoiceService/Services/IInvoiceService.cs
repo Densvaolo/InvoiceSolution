@@ -8,7 +8,7 @@ namespace InvoiceService.Services
         Task<IEnumerable<Invoice>> GetAllAsync();
         Task<Invoice?> GetByIdAsync(int id);
         Task<Invoice> CreateAsync(CreateInvoiceDto dto);
-        Task<bool> UpdateAsync(int id, Invoice invoice);
+        Task<Invoice?> UpdateAsync(int id, UpdateInvoiceDto dto);
         Task<bool> DeleteAsync(int id);
     }
 }

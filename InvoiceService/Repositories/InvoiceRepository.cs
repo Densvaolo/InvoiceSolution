@@ -13,6 +13,11 @@ namespace InvoiceService.Repositories
             return await _context.Invoices.ToListAsync();
         }
 
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<Invoice?> GetByIdAsync(int id)
         {
             return await _context.Invoices.FindAsync(id);

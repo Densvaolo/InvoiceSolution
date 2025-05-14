@@ -8,7 +8,9 @@ namespace InvoiceService.Repositories
         Task<Invoice?> GetByIdAsync(int id);
         Task<Invoice> AddAsync(Invoice invoice);
         Task UpdateAsync(Invoice invoice);
+        Task SaveChangesAsync();
         Task DeleteAsync(int id);
+
         Task<bool> ExistsAsync(int id);
     }
 }
