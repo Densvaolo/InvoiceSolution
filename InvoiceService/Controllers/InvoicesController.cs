@@ -22,7 +22,7 @@ namespace InvoiceService.Controllers
         }
 
 
-        //[Authorize] // Lägg till ROLE
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoices()
         {
@@ -30,6 +30,7 @@ namespace InvoiceService.Controllers
             return Ok(invoices);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Invoice>> GetInvoice(int id)
         {
@@ -39,7 +40,7 @@ namespace InvoiceService.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutInvoice(int id, UpdateInvoiceDto dto)
         {
@@ -49,7 +50,7 @@ namespace InvoiceService.Controllers
         }
 
         // Använda modelstate?
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Invoice>> PostInvoice(CreateInvoiceDto dto)
         {
@@ -58,7 +59,7 @@ namespace InvoiceService.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInvoice(int id)
         {
