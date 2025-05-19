@@ -1,13 +1,30 @@
-﻿namespace InvoiceService.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+public class CreateInvoiceDto
 {
-    public class CreateInvoiceDto
-    {
-        public int BookingId { get; set; }
-        public string CustomerName { get; set; }
-        public string EventName { get; set; }
-        public decimal Amount { get; set; }
-        public DateTime IssuedDate { get; set; }
-        public DateTime DueDate { get; set; }
-        public string Status { get; set; } // t.ex. "Unpaid"
-    }
+    [Required]
+    public int BookingId { get; set; }
+
+    [Required]
+    [StringLength(100)]
+    public string CustomerName { get; set; }
+
+    [Required]
+    [StringLength(100)]
+    public string EventName { get; set; }
+
+    [Required]
+    [Range(1, double.MaxValue, ErrorMessage = "Amount must be greater than 0.")]
+    public decimal Amount { get; set; }
+
+    [Required]
+    public DateTime IssuedDate { get; set; }
+
+    [Required]
+    public DateTime DueDate { get; set; }
+
+    [Required]
+    public string Status { get; set; }
 }
+
+

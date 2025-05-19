@@ -40,23 +40,30 @@ namespace InvoiceService.Controllers
         }
 
 
-       // [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
+        // [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutInvoice(int id, UpdateInvoiceDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var updated = await _invoiceService.UpdateAsync(id, dto);
             if (updated == null) return NotFound();
             return Ok(updated);
         }
 
-        // Använda modelstate?
-        //[Authorize(Roles = "Admin")]
+
         [HttpPost]
+        // [Authorize(Roles = "Admin")]
         public async Task<ActionResult<InvoiceDto>> PostInvoice(CreateInvoiceDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var created = await _invoiceService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetInvoice), new { id = created.Id }, created);
         }
+
 
 
 
