@@ -22,6 +22,7 @@ namespace InvoiceService.Services
                 EventName = i.EventName,
                 Amount = i.Amount,
                 DueDate = i.DueDate,
+                IssuedDate = i.IssuedDate, 
                 Status = i.Status
             });
         }
@@ -41,6 +42,7 @@ namespace InvoiceService.Services
                 EventName = invoice.EventName,
                 Amount = invoice.Amount,
                 DueDate = invoice.DueDate,
+                IssuedDate = invoice.IssuedDate,
                 Status = invoice.Status
             };
         }
@@ -77,11 +79,22 @@ namespace InvoiceService.Services
 
         public async Task<InvoiceDto?> UpdateAsync(int id, UpdateInvoiceDto dto)
         {
+
+            Console.WriteLine("📩 DTO I API:");
+            Console.WriteLine($"IssuedDate: {dto.IssuedDate}");
+            Console.WriteLine($"Amount: {dto.Amount}");
+            Console.WriteLine($"CustomerName: {dto.CustomerName}");
             var invoice = await _repository.GetByIdAsync(id);
             if (invoice == null) return null;
 
-            invoice.Status = dto.Status;
+            invoice.BookingId = dto.BookingId;
+            invoice.CustomerName = dto.CustomerName;
+            invoice.EventName = dto.EventName;
+            invoice.Amount = dto.Amount;
+            invoice.IssuedDate = dto.IssuedDate;
             invoice.DueDate = dto.DueDate;
+            invoice.Status = dto.Status;
+
 
             await _repository.SaveChangesAsync();
 
@@ -93,9 +106,11 @@ namespace InvoiceService.Services
                 EventName = invoice.EventName,
                 Amount = invoice.Amount,
                 DueDate = invoice.DueDate,
+                IssuedDate = invoice.IssuedDate,
                 Status = invoice.Status
             };
         }
+
 
 
         public async Task<bool> DeleteAsync(int id)
@@ -104,19 +119,6 @@ namespace InvoiceService.Services
 
             await _repository.DeleteAsync(id);
             return true;
-        }
-
-        private InvoiceDto MapToDto(Invoice invoice)
-        {
-            return new InvoiceDto
-            {
-                InvoiceNumber = invoice.InvoiceNumber,
-                CustomerName = invoice.CustomerName,
-                EventName = invoice.EventName,
-                Amount = invoice.Amount,
-                Status = invoice.Status,
-                DueDate = invoice.DueDate
-            };
         }
 
 

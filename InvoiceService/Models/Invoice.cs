@@ -1,4 +1,6 @@
-﻿namespace InvoiceService.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace InvoiceService.Models
 {
     public class Invoice
     {
@@ -7,6 +9,7 @@
         public int BookingId { get; set; }
         public string CustomerName { get; set; } = null!;
         public string EventName { get; set; } = null!;
+        [Precision(18, 2)]
         public decimal Amount { get; set; }
         public DateTime IssuedDate { get; set; }
         public DateTime DueDate { get; set; }

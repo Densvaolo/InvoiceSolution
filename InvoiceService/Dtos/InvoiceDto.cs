@@ -3,11 +3,13 @@
     public class InvoiceDto
     {
         public int Id { get; set; }
-        public string InvoiceNumber { get; set; } = string.Empty;
-        public string CustomerName { get; set; } = string.Empty;
-        public string EventName { get; set; } = string.Empty;
+        public string InvoiceNumber { get; set; } = null!;
+        public string CustomerName { get; set; } = null!;
+        public string EventName { get; set; } = null!;
         public decimal Amount { get; set; }
-        public string Status { get; set; } = string.Empty;
         public DateTime DueDate { get; set; }
+        public DateTime IssuedDate { get; set; } 
+        public string Status { get; set; } = null!;
+
     }
 }
